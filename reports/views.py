@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, Http404
 from django.conf import settings
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from .models import Report, Department, Category, StatusHistory, AIClassification
 from .utils import (
@@ -122,24 +123,30 @@ def submit_report(request):
     return redirect('track_report', citizen_token=report.citizen_token)
 
 
+@csrf_exempt
 @require_http_methods(["POST"])
 def classify_photo(request):
     """
     Receive photo from the form, run AI classification, and return JSON.
     """
-    photo = request.FILES.get('photo')
-    if not photo:
-        return JsonResponse({'error': 'No photo uploaded.'}, status=400)
-
-    temp_name = default_storage.save(f'tmp/{photo.name}', ContentFile(photo.read()))
     try:
-        temp_path = default_storage.path(temp_name)
-        classification_result = real_classify_image(temp_path)
-        classification_result = normalize_classification_result(classification_result)
-    finally:
-        default_storage.delete(temp_name)
+        photo = request.FILES.get('photo')
+        if not photo:
+            return JsonResponse({'error': 'No photo uploaded.'}, status=400)
 
-    return JsonResponse(classification_result)
+        temp_name = default_storage.save(f'tmp/{photo.name}', ContentFile(photo.read()))
+        try:
+            temp_path = default_storage.path(temp_name)
+            classification_result = real_classify_image(temp_path)
+            classification_result = normalize_classification_result(classification_result)
+            return JsonResponse(classification_result)
+        finally:
+            default_storage.delete(temp_name)
+    except Exception as e:
+        print(f"ERROR in classify_photo: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({'error': f'Classification failed: {str(e)}'}, status=500)
 
 
 def track_report(request, citizen_token):
