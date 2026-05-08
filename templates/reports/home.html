@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Submit Report - CityAssist{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Report a City Issue</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'submit_report' %}" enctype="multipart/form-data" id="reportForm">
+                    {% csrf_token %}
+                    
+                    <!-- Photo Upload -->
+                    <div class="mb-3">
+                        <label for="photo" class="form-label">Photo of the Issue *</label>
+                        <input type="file" class="form-control" id="photo" name="photo" accept="image/*" required>
+                        <div class="mt-2">
+                            <img id="photoPreview" src="" alt="Preview" class="img-fluid d-none" style="max-height: 200px;">
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address *</label>
+                        <input type="text" class="form-control" id="address" name="address" placeholder="Enter the address" required>
+                    </div>
+
+                    <!-- GPS Coordinates (Hidden) -->
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+
+                    <!-- Get Location Button -->
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-outline-info btn-sm" id="getLocationBtn">
+                            📍 Get Current Location
+                        </button>
+                        <small id="locationStatus" class="text-muted ms-2"></small>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description *</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" 
+                            placeholder="Describe the issue in detail..." required></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            Submit Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5>How it works</h5>
+                <ol class="mb-0">
+                    <li>Take a photo of the city issue</li>
+                    <li>Enter the address and description</li>
+                    <li>Our AI will classify the issue type</li>
+                    <li>The relevant department will be notified</li>
+                    <li>Track your report status with a unique link</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Photo preview
+    const photoInput = document.getElementById('photo');
+    const photoPreview = document.getElementById('photoPreview');
+    
+    photoInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                photoPreview.src = e.target.result;
+                photoPreview.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Geolocation
+    const getLocationBtn = document.getElementById('getLocationBtn');
+    const locationStatus = document.getElementById('locationStatus');
+    const latitudeInput = document.getElementById('latitude');
+    const longitudeInput = document.getElementById('longitude');
+
+    getLocationBtn.addEventListener('click', function() {
+        if (!navigator.geolocation) {
+            locationStatus.textContent = 'Geolocation is not supported by your browser';
+            return;
+        }
+
+        locationStatus.textContent = 'Locating...';
+        
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                
+                latitudeInput.value = lat;
+                longitudeInput.value = lng;
+                
+                locationStatus.textContent = `Location captured: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+                locationStatus.classList.remove('text-muted');
+                locationStatus.classList.add('text-success');
+            },
+            function(error) {
+                let message = 'Unable to retrieve location';
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        message = 'Location access denied by user';
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        message = 'Location information unavailable';
+                        break;
+                    case error.TIMEOUT:
+                        message = 'Location request timed out';
+                        break;
+                }
+                locationStatus.textContent = message;
+                locationStatus.classList.remove('text-muted');
+                locationStatus.classList.add('text-danger');
+            }
+        );
+    });
+});
+</script>
+{% endblock %}

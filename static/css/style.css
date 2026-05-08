@@ -1,0 +1,76 @@
+/* CityAssist Custom Styles */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
+
+#photoPreview {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#map {
+    border-radius: 0 0 10px 10px;
+}
+
+.timeline {
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.badge {
+    font-size: 0.85em;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.btn-lg {
+    padding: 12px 24px;
+}
+
+footer {
+    margin-top: auto;
+}
+
+/* Status badges */
+.badge-pending { background-color: #ffc107; color: #000; }
+.badge-accepted { background-color: #17a2b8; }
+.badge-in_progress { background-color: #007bff; }
+.badge-resolved { background-color: #28a745; }
+.badge-rejected { background-color: #dc3545; }
+
+/* Priority badges */
+.badge-low { background-color: #28a745; }
+.badge-medium { background-color: #ffc107; color: #000; }
+.badge-high { background-color: #dc3545; }

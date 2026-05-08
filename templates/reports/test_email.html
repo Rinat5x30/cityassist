@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}E-poçt Testi — CityAssist{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top:100px;min-height:80vh;display:flex;align-items:center;">
+  <div class="section-container" style="max-width:520px;margin:0 auto;width:100%;">
+
+    <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.12);">
+
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:35px 30px;text-align:center;color:white;">
+        <div style="font-size:40px;margin-bottom:10px;">📧</div>
+        <h1 style="margin:0;font-size:24px;font-weight:700;">E-poçt Sistemi Testi</h1>
+        <p style="margin:8px 0 0;opacity:0.85;font-size:14px;">Gmail SMTP bağlantısını yoxlayın</p>
+      </div>
+
+      <!-- Result Banner -->
+      {% if result %}
+        {% if result.success %}
+        <div style="background:#d1fae5;border-left:4px solid #10b981;padding:16px 24px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:22px;">✅</span>
+          <div>
+            <p style="margin:0;font-weight:600;color:#065f46;">E-poçt uğurla göndərildi!</p>
+            <p style="margin:4px 0 0;font-size:13px;color:#047857;">{{ result.email }} ünvanını yoxlayın.</p>
+          </div>
+        </div>
+        {% else %}
+        <div style="background:#fee2e2;border-left:4px solid #ef4444;padding:16px 24px;display:flex;align-items:flex-start;gap:12px;">
+          <span style="font-size:22px;">❌</span>
+          <div>
+            <p style="margin:0;font-weight:600;color:#991b1b;">Göndərmə uğursuz oldu</p>
+            <p style="margin:4px 0 0;font-size:13px;color:#b91c1c;word-break:break-word;">{{ result.error }}</p>
+          </div>
+        </div>
+        {% endif %}
+      {% endif %}
+
+      <!-- Form -->
+      <div style="padding:30px;">
+        <p style="color:#555;font-size:14px;margin-top:0;line-height:1.6;">
+          Test e-poçtu göndərmək üçün e-poçt ünvanınızı daxil edin. Bu, Gmail SMTP bağlantısının düzgün işlədiyini təsdiqləyəcək.
+        </p>
+
+        <form method="post" style="display:flex;flex-direction:column;gap:16px;">
+          {% csrf_token %}
+          <div>
+            <label for="email" style="display:block;font-size:14px;font-weight:500;margin-bottom:6px;color:#374151;">
+              E-poçt ünvanı
+            </label>
+            <input type="email" id="email" name="email" required
+              placeholder="test@gmail.com"
+              style="width:100%;padding:12px 14px;border:1px solid #d1d5db;border-radius:8px;
+                     font-size:15px;box-sizing:border-box;outline:none;
+                     transition:border-color 0.2s;"
+              onfocus="this.style.borderColor='#667eea'"
+              onblur="this.style.borderColor='#d1d5db'">
+          </div>
+
+          <button type="submit"
+            style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;
+                   border:none;padding:14px;border-radius:8px;font-size:15px;font-weight:600;
+                   cursor:pointer;transition:opacity 0.2s;"
+            onmouseover="this.style.opacity='0.9'"
+            onmouseout="this.style.opacity='1'">
+            Test E-poçtu Göndər
+          </button>
+        </form>
+
+        <div style="margin-top:20px;padding:14px;background:#f3f4f6;border-radius:8px;font-size:13px;color:#6b7280;">
+          <strong style="color:#374151;">SMTP Konfiqurasiyası:</strong><br>
+          Host: smtp.gmail.com:587 &nbsp;|&nbsp; TLS: Aktiv<br>
+          Göndərən: <code style="color:#4f46e5;">{{ EMAIL_HOST_USER }}</code>
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:20px;">
+      <a href="{% url 'home' %}" style="color:#667eea;font-size:14px;text-decoration:none;">
+        ← Ana səhifəyə qayıt
+      </a>
+    </p>
+  </div>
+</section>
+{% endblock %}

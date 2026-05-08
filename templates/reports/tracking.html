@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Müraciətin izlənməsi — CityAssist{% endblock %}
+
+{% block content %}
+<section class="section" style="padding-top: 100px;">
+    <div class="section-container">
+        <!-- Email notification banner -->
+        {% if report.citizen_email %}
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius-lg);padding:var(--space-md) var(--space-xl);margin-bottom:var(--space-lg);display:flex;align-items:center;gap:var(--space-md);">
+            <i class="fas fa-envelope-open-text" style="color:#10b981;font-size:1.2rem;flex-shrink:0;"></i>
+            <p style="margin:0;font-size:var(--font-size-sm);color:#065f46;">
+                Status dəyişdikdə <strong>{{ report.citizen_email }}</strong> ünvanına bildiriş göndəriləcək.
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Report Header Card -->
+        <div style="background: white; border-radius: var(--radius-xl); padding: var(--space-2xl); box-shadow: var(--shadow-lg); margin-bottom: var(--space-xl);">
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-md); align-items: center; justify-content: space-between; margin-bottom: var(--space-lg);">
+                <div>
+                    <span style="font-size: var(--font-size-sm); color: var(--color-text-muted);">Müraciət #{{ report.id|slice:":8" }}</span>
+                    <h1 style="font-size: var(--font-size-2xl); font-weight: 700; margin-top: var(--space-xs);">{{ report.title }}</h1>
+                </div>
+                <span class="status-badge status-{{ report.status }}">
+                    {{ report.get_status_display }}
+                </span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-xl);">
+                <!-- Photo -->
+                {% if report.photo %}
+                <div>
+                    <img src="{{ report.photo.url }}" alt="Report photo" style="width: 100%; max-height: 350px; object-fit: cover; border-radius: var(--radius-lg);">
+                </div>
+                {% endif %}
+                
+                <!-- Details -->
+                <div>
+                    <p style="color: var(--color-text-light); margin-bottom: var(--space-lg); line-height: 1.7;">{{ report.description }}</p>
+                    
+                    <div style="display: grid; gap: var(--space-md);">
+                        <div style="display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: 1px solid var(--color-border);">
+                            <span style="color: var(--color-text-muted);">Kateqoriya</span>
+                            <span style="font-weight: 500;">{{ report.category.name|default:"Müəyyən edilməyib" }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: 1px solid var(--color-border);">
+                            <span style="color: var(--color-text-muted);">Prioritet</span>
+                            <span class="priority-badge priority-{{ report.priority }}">{{ report.get_priority_display }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: 1px solid var(--color-border);">
+                            <span style="color: var(--color-text-muted);">İdarə</span>
+                            <span style="font-weight: 500;">{{ report.department.name|default:"Təyin edilməyib" }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: 1px solid var(--color-border);">
+                            <span style="color: var(--color-text-muted);">Ünvan</span>
+                            <span style="font-weight: 500; text-align: right;">{{ report.address }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: var(--space-sm) 0;">
+                            <span style="color: var(--color-text-muted);">Yaradılıb</span>
+                            <span style="font-weight: 500;">{{ report.created_at|date:"d.m.Y H:i" }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Two Column Layout -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl);">
+            <!-- Left Column: Map -->
+            <div>
+                {% if report.latitude and report.longitude %}
+                <div style="background: white; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg);">
+                    <div style="padding: var(--space-lg) var(--space-xl); border-bottom: 1px solid var(--color-border);">
+                        <h3 style="font-size: var(--font-size-lg); font-weight: 600;">
+                            <i class="fas fa-map-marker-alt" style="color: var(--color-primary); margin-right: var(--space-sm);"></i>
+                            Məkan
+                        </h3>
+                    </div>
+                    <div id="map" style="height: 350px;"></div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Right Column: AI & History -->
+            <div style="display: flex; flex-direction: column; gap: var(--space-lg);">
+                <!-- AI Classification -->
+                {% if ai_classification %}
+                <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); border-radius: var(--radius-xl); padding: var(--space-xl); color: white;">
+                    <div style="display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md);">
+                        <i class="fas fa-robot" style="font-size: var(--font-size-xl);"></i>
+                        <h3 style="font-size: var(--font-size-lg); font-weight: 600;">AI Təsnifatı</h3>
+                    </div>
+                    <div style="display: grid; gap: var(--space-md);">
+                        <div style="display: flex; justify-content: space-between; padding: var(--space-sm) 0; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                            <span style="opacity: 0.9;">Kateqoriya</span>
+                            <span style="font-weight: 600;">{{ ai_classification.category_predicted }}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: var(--space-sm) 0;">
+                            <span style="opacity: 0.9;">Əminlik</span>
+                            <span style="font-weight: 600;" id="confidence-value">{{ ai_classification.confidence|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Status History -->
+                <div style="background: white; border-radius: var(--radius-xl); padding: var(--space-xl); box-shadow: var(--shadow-lg);">
+                    <h3 style="font-size: var(--font-size-lg); font-weight: 600; margin-bottom: var(--space-lg);">
+                        <i class="fas fa-history" style="color: var(--color-primary); margin-right: var(--space-sm);"></i>
+                        Status tarixçəsi
+                    </h3>
+                    
+                    {% if status_history %}
+                        <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                            {% for history in status_history %}
+                                <div style="display: flex; flex-direction: column; gap: var(--space-xs); padding: var(--space-md); background: var(--color-bg-alt); border-radius: var(--radius-md);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="font-size: var(--font-size-xs); color: var(--color-text-muted);">{{ history.changed_at|date:"d.m.Y H:i" }}</span>
+                                        <span class="status-badge-small status-{{ history.new_status }}">{{ history.get_new_status_display|default:history.new_status }}</span>
+                                    </div>
+                                    {% if history.comment %}
+                                        <p style="font-size: var(--font-size-sm); color: var(--color-text-light); margin: 0;">{{ history.comment }}</p>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="color: var(--color-text-muted); text-align: center; padding: var(--space-lg);">Tarixçə hələlik boşdur</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Save Bookmark -->
+                <div style="background: var(--color-bg-alt); border-radius: var(--radius-lg); padding: var(--space-lg); text-align: center;">
+                    <i class="fas fa-bookmark" style="color: var(--color-primary); font-size: var(--font-size-xl); margin-bottom: var(--space-sm);"></i>
+                    <p style="font-size: var(--font-size-sm); color: var(--color-text-light); margin: 0;">
+                        Statusu istənilən vaxt izləmək üçün bu səhifəni yadda saxlayın
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.status-badge {
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-accepted { background: #dbeafe; color: #1e40af; }
+.status-in_progress { background: #e0e7ff; color: #3730a3; }
+.status-resolved { background: #d1fae5; color: #065f46; }
+.status-rejected { background: #fee2e2; color: #991b1b; }
+
+.status-badge-small {
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.priority-badge {
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+}
+.priority-high { background: #fee2e2; color: #991b1b; }
+.priority-medium { background: #fef3c7; color: #92400e; }
+.priority-low { background: #d1fae5; color: #065f46; }
+
+@media (max-width: 768px) {
+    div[style*="grid-template-columns: 2fr 1fr"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+{% if report.latitude and report.longitude %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const lat = {{ report.latitude }};
+    const lng = {{ report.longitude }};
+    
+    const map = L.map('map').setView([lat, lng], 15);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    
+    L.marker([lat, lng]).addTo(map)
+        .bindPopup('Müraciətin yeri')
+        .openPopup();
+});
+</script>
+{% endif %}
+
+{% if ai_classification %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const confidenceElement = document.getElementById('confidence-value');
+    if (confidenceElement) {
+        const confidence = parseFloat(confidenceElement.textContent);
+        const percentage = Math.round(confidence * 100);
+        confidenceElement.textContent = percentage + '%';
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

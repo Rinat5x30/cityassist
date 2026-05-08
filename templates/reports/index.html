@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CityAssist — Ağıllı şəhər sizinlə başlayır{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-container">
+        <div class="hero-card">
+            <div class="hero-badge">
+                <i class="fas fa-sparkles"></i>
+                AI-powered şəhər platforması
+            </div>
+            <h1 class="hero-title">
+                CityAssist — <span>ağıllı şəhər</span> bir foto ilə başlayır
+            </h1>
+            <p class="hero-subtitle">
+                Şəhər problemləri haqqında məlumat verin. Süni intellekt avtomatik olaraq 
+                problemi müəyyən edəcək və uyğun idarəyə göndərəcək.
+            </p>
+            <a href="{% url 'report' %}" class="hero-cta">
+                Problem haqqında bildirin
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="section section-alt">
+    <div class="section-container">
+        <div class="section-header fade-in">
+            <span class="section-label">Bu necə işləyir</span>
+            <h2 class="section-title">Cəmi 4 sadə addım</h2>
+            <p class="section-subtitle">
+                Fotoşəkildən problemin həllinə qədər — sadə və şəffaf proses
+            </p>
+        </div>
+        
+        <div class="steps-grid">
+            <div class="step-card fade-in">
+                <div class="step-number">1</div>
+                <div class="step-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3 class="step-title">Foto çəkin</h3>
+                <p class="step-description">
+                    Şəhər problemini fotoşəkil edin — çuxur, sıradan çıxmış işıq, zibil yığımı və ya digərləri
+                </p>
+            </div>
+            
+            <div class="step-card fade-in">
+                <div class="step-number">2</div>
+                <div class="step-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3 class="step-title">AI təhlil edir</h3>
+                <p class="step-description">
+                    Sistemimiz avtomatik olaraq problem növünü və prioriteti müəyyən edir
+                </p>
+            </div>
+            
+            <div class="step-card fade-in">
+                <div class="step-number">3</div>
+                <div class="step-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                <h3 class="step-title">İdarəyə göndərilmə</h3>
+                <p class="step-description">
+                    Müraciət avtomatik olaraq uyğun şəhər idarəsinə yönləndirilir
+                </p>
+            </div>
+            
+            <div class="step-card fade-in">
+                <div class="step-number">4</div>
+                <div class="step-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="step-title">Statusu izləyin</h3>
+                <p class="step-description">
+                    Şəxsi link vasitəsilə problemin həlli prosesini izləyin
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="section">
+    <div class="section-container">
+        <div class="section-header fade-in">
+            <span class="section-label">Kateqoriyalar</span>
+            <h2 class="section-title">Hansı problemləri həll edirik</h2>
+            <p class="section-subtitle">
+                Yollardan işıqlandırmaya qədər — bütün əsas şəhər problemlərini əhatə edirik
+            </p>
+        </div>
+        
+        <div class="categories-grid">
+            <div class="category-card fade-in">
+                <div class="category-icon" style="color: #ef4444;">
+                    <i class="fas fa-road"></i>
+                </div>
+                <div class="category-content">
+                    <h3>Yollardakı çuxurlar</h3>
+                    <p>Yol örtüyünün zədələnməsi, çuxurlar, çatlar</p>
+                </div>
+            </div>
+            
+            <div class="category-card fade-in">
+                <div class="category-icon" style="color: #f59e0b;">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div class="category-content">
+                    <h3>İşıqlandırma</h3>
+                    <p>Sıradan çıxmış işıqlar, işıqlandırmanın olmaması, yanıb-sönmə</p>
+                </div>
+            </div>
+            
+            <div class="category-card fade-in">
+                <div class="category-icon" style="color: #10b981;">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <div class="category-content">
+                    <h3>Zibil yığınları</h3>
+                    <p>Qanunsız zibil yığınları, dolmuş zibil qutuları</p>
+                </div>
+            </div>
+            
+            <div class="category-card fade-in">
+                <div class="category-icon" style="color: #3b82f6;">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <div class="category-content">
+                    <h3>Su sızıntıları</h3>
+                    <p>Boruların partlaması, daşqınlar, sızıntılar</p>
+                </div>
+            </div>
+            
+            <div class="category-card fade-in">
+                <div class="category-icon" style="color: #8b5cf6;">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <div class="category-content">
+                    <h3>Sıradan çıxmış infrastruktur</h3>
+                    <p>Skamyalar, hasarlar, yol nişanları, plitələr</p>
+                </div>
+            </div>
+            
+            <div class="category-card fade-in">
+                <div class="category-icon" style="color: #ec4899;">
+                    <i class="fas fa-spray-can"></i>
+                </div>
+                <div class="category-content">
+                    <h3>Qrafiti</h3>
+                    <p>Qanunsuz yazılar və şəkillər</p>
+                </div>
+            </div>
+            
+            <div class="category-card fade-in">
+                <div class="category-icon" style="color: #059669;">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <div class="category-content">
+                    <h3>Təhlükəli ağaclar</h3>
+                    <p>Devrilmiş ağaclar, təhlükəli budaqlar, köklər</p>
+                </div>
+            </div>
+            
+            <div class="category-card fade-in">
+                <div class="category-icon" style="color: #6366f1;">
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+                <div class="category-content">
+                    <h3>Və digərləri</h3>
+                    <p>Bütün digər şəhər problemləri</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="section section-alt">
+    <div class="section-container">
+        <div class="section-header fade-in">
+            <span class="section-label">Üstünlüklər</span>
+            <h2 class="section-title">Niyə bu işləyir</h2>
+            <p class="section-subtitle">
+                Sistemimizin üç əsas üstünlüyü
+            </p>
+        </div>
+        
+        <div class="benefits-grid">
+            <div class="benefit-card fade-in">
+                <div class="benefit-icon">
+                    <i class="fas fa-route"></i>
+                </div>
+                <h3 class="benefit-title">Avtomatik yönləndirmə</h3>
+                <p class="benefit-description">
+                    Süni intellekt avtomatik olaraq problem növünü müəyyən edir və müraciəti 
+                    gecikmə və səhv olmadan uyğun idarəyə göndərir.
+                </p>
+            </div>
+            
+            <div class="benefit-card fade-in">
+                <div class="benefit-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3 class="benefit-title">Şəffaf nəzarət</h3>
+                <p class="benefit-description">
+                    Müraciətinizin statusunu real vaxtda izləyin. 
+                    Dəyişikliklərin tam tarixi unikal link vasitəsilə əlçatandır.
+                </p>
+            </div>
+            
+            <div class="benefit-card fade-in">
+                <div class="benefit-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="benefit-title">Sürətli reaksiya</h3>
+                <p class="benefit-description">
+                    Məsul xidmətlərin ani bildirişi. 
+                    Kritik problemlər üçün yüksək prioritet.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section" style="background: var(--gradient-hero); position: relative;">
+    <div style="position: absolute; inset: 0; background: url(&quot;data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&quot;); opacity: 0.5;"></div>
+    <div class="section-container" style="position: relative; z-index: 1; text-align: center;">
+        <h2 class="section-title" style="color: white; margin-bottom: var(--space-lg);">
+            Şəhəri daha yaxşı etməyə hazırsınız?
+        </h2>
+        <p style="color: rgba(255,255,255,0.9); font-size: var(--font-size-xl); margin-bottom: var(--space-2xl);">
+            Bir foto problemi həll etmə prosesini işə sala bilər
+        </p>
+        <a href="{% url 'report' %}" class="hero-cta" style="background: white; color: var(--color-primary);">
+            Problem haqqında bildirin
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+</section>
+{% endblock %}

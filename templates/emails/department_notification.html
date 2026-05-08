@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background:#f0f2f5;font-family:Arial,Helvetica,sans-serif;">
+  <div style="max-width:600px;margin:30px auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:35px 30px;text-align:center;color:#ffffff;">
+      <div style="font-size:36px;margin-bottom:8px;">🏙️</div>
+      <h1 style="margin:0;font-size:26px;font-weight:700;letter-spacing:-0.5px;">CityAssist</h1>
+      <p style="margin:8px 0 0;opacity:0.85;font-size:15px;">Yeni Vətəndaş Müraciəti</p>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:35px 30px;">
+      <p style="font-size:16px;color:#333;margin-top:0;">Hörmətli <strong>{{ report.department.name }}</strong> əməkdaşları,</p>
+      <p style="color:#555;line-height:1.6;">Yeni vətəndaş müraciəti qəbul edildi və sizin idarəyə yönləndirildi. Zəhmət olmasa aşağıdakı məlumatlarla tanış olun.</p>
+
+      <!-- Report Details -->
+      <table style="width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;">
+        <tr style="background:#f8f9fa;">
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;width:40%;">Müraciət ID</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;color:#212529;font-family:monospace;font-size:12px;">{{ report.id }}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;">Kateqoriya</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;color:#212529;">{{ report.category.name|default:"Müəyyən edilməyib" }}</td>
+        </tr>
+        <tr style="background:#f8f9fa;">
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;">Prioritet</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;">
+            {% if report.priority == 'high' %}
+              <span style="background:#fee2e2;color:#991b1b;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">{{ report.get_priority_display }}</span>
+            {% elif report.priority == 'medium' %}
+              <span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">{{ report.get_priority_display }}</span>
+            {% else %}
+              <span style="background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;">{{ report.get_priority_display }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;">Ünvan</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;color:#212529;">{{ report.address }}</td>
+        </tr>
+        <tr style="background:#f8f9fa;">
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;">Təsvir</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;color:#212529;line-height:1.5;">{{ report.description }}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;">Tarix</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;color:#212529;">{{ report.created_at|date:"d.m.Y H:i" }}</td>
+        </tr>
+      </table>
+
+      <!-- AI Classification -->
+      {% if ai %}
+      <div style="background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);border-radius:10px;padding:20px 25px;color:#ffffff;margin:20px 0;">
+        <div style="display:flex;align-items:center;margin-bottom:12px;">
+          <span style="font-size:20px;margin-right:8px;">🤖</span>
+          <strong style="font-size:15px;">AI Təsnifatı</strong>
+        </div>
+        <table style="width:100%;font-size:14px;">
+          <tr>
+            <td style="padding:4px 0;opacity:0.85;width:50%;">Kateqoriya:</td>
+            <td style="padding:4px 0;font-weight:700;">{{ ai.category_predicted }}</td>
+          </tr>
+          <tr>
+            <td style="padding:4px 0;opacity:0.85;">Əminlik:</td>
+            <td style="padding:4px 0;font-weight:700;">{{ confidence_display }}</td>
+          </tr>
+        </table>
+      </div>
+      {% endif %}
+
+      <!-- CTA Button -->
+      <div style="text-align:center;margin:30px 0 10px;">
+        <a href="{{ site_url }}/r/{{ report.dept_token }}/"
+           style="display:inline-block;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#ffffff;text-decoration:none;padding:16px 36px;border-radius:10px;font-size:16px;font-weight:700;letter-spacing:0.3px;">
+          Müraciətə Baxın &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="background:#f8f9fa;padding:20px 30px;text-align:center;border-top:1px solid #e9ecef;">
+      <p style="margin:0;color:#6c757d;font-size:12px;">CityAssist &mdash; Şəhər Xidmətlərini Rəqəmsallaşdırırıq</p>
+      <p style="margin:5px 0 0;color:#adb5bd;font-size:11px;">Bu e-poçt avtomatik göndərilmişdir, cavab verməyin.</p>
+    </div>
+
+  </div>
+</body>
+</html>

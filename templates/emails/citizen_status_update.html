@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background:#f0f2f5;font-family:Arial,Helvetica,sans-serif;">
+  <div style="max-width:600px;margin:30px auto;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#10b981 0%,#059669 100%);padding:35px 30px;text-align:center;color:#ffffff;">
+      <div style="font-size:36px;margin-bottom:8px;">📬</div>
+      <h1 style="margin:0;font-size:26px;font-weight:700;">CityAssist</h1>
+      <p style="margin:8px 0 0;opacity:0.85;font-size:15px;">Müraciətinizin statusu dəyişdi</p>
+    </div>
+
+    <!-- Status Banner -->
+    <div style="padding:20px 30px;background:#f0fdf4;border-bottom:1px solid #bbf7d0;text-align:center;">
+      <p style="margin:0;font-size:13px;color:#065f46;">Yeni status</p>
+      <p style="margin:6px 0 0;font-size:22px;font-weight:700;color:#059669;">{{ report.get_status_display }}</p>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:35px 30px;">
+      <p style="font-size:16px;color:#333;margin-top:0;">Hörmətli vətəndaş,</p>
+      <p style="color:#555;line-height:1.6;">
+        Göndərdiyiniz müraciətin statusu yeniləndi. Aşağıda müraciətinizin cari vəziyyəti göstərilib.
+      </p>
+
+      <!-- Report Details -->
+      <table style="width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;">
+        <tr style="background:#f8f9fa;">
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;width:40%;">Müraciət ID</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;color:#212529;font-family:monospace;font-size:12px;">{{ report.id|slice:":16" }}...</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;">Ünvan</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;color:#212529;">{{ report.address }}</td>
+        </tr>
+        <tr style="background:#f8f9fa;">
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;">Kateqoriya</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;color:#212529;">{{ report.category.name|default:"Müəyyən edilməyib" }}</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;">Yeni Status</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;">
+            {% if report.status == 'resolved' %}
+              <span style="background:#d1fae5;color:#065f46;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">{{ report.get_status_display }}</span>
+            {% elif report.status == 'rejected' %}
+              <span style="background:#fee2e2;color:#991b1b;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">{{ report.get_status_display }}</span>
+            {% elif report.status == 'in_progress' %}
+              <span style="background:#e0e7ff;color:#3730a3;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">{{ report.get_status_display }}</span>
+            {% elif report.status == 'accepted' %}
+              <span style="background:#dbeafe;color:#1e40af;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">{{ report.get_status_display }}</span>
+            {% else %}
+              <span style="background:#fef3c7;color:#92400e;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:600;">{{ report.get_status_display }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% if comment %}
+        <tr style="background:#f8f9fa;">
+          <td style="padding:12px 15px;border:1px solid #e9ecef;font-weight:600;color:#495057;">Şərh</td>
+          <td style="padding:12px 15px;border:1px solid #e9ecef;color:#212529;line-height:1.5;">{{ comment }}</td>
+        </tr>
+        {% endif %}
+      </table>
+
+      <!-- CTA Button -->
+      <div style="text-align:center;margin:30px 0 10px;">
+        <a href="{{ site_url }}/track/{{ report.citizen_token }}/"
+           style="display:inline-block;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#ffffff;text-decoration:none;padding:16px 36px;border-radius:10px;font-size:16px;font-weight:700;">
+          Müraciəti İzləyin &rarr;
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="background:#f8f9fa;padding:20px 30px;text-align:center;border-top:1px solid #e9ecef;">
+      <p style="margin:0;color:#6c757d;font-size:12px;">CityAssist &mdash; Şəhər Xidmətlərini Rəqəmsallaşdırırıq</p>
+      <p style="margin:5px 0 0;color:#adb5bd;font-size:11px;">Bu e-poçt avtomatik göndərilmişdir, cavab verməyin.</p>
+    </div>
+
+  </div>
+</body>
+</html>

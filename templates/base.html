@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CityAssist — Ağıllı şəhər sizinlə başlayır{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏙</text></svg>">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/modern.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="{% url 'home' %}" class="navbar-brand">
+                <span class="brand-text">CityAssist</span>
+            </a>
+
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="navbar-menu" id="navbarMenu">
+                <ul class="navbar-links">
+                    <li><a href="{% url 'home' %}" class="nav-link">Əsas səhifə</a></li>
+                    <li><a href="{% url 'report' %}" class="nav-link nav-link-primary">Problem haqqında bildirin</a></li>
+                    {% if debug %}<li><a href="{% url 'test_email' %}" class="nav-link" style="color:#f59e0b;">E-poçt Testi</a></li>{% endif %}
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }}" role="alert">
+            <i
+                class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+            {{ message }}
+            <button type="button" class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <span class="brand-text">CityAssist</span>
+                    <p class="footer-tagline">Ağıllı şəhər bir foto ilə başlayır</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Naviqasiya</h4>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Əsas səhifə</a></li>
+                        <li><a href="{% url 'report' %}">Problem haqqında bildirin</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Əlaqə</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@cityassist.az</li>
+                        <li><i class="fas fa-phone"></i> +994 XX XXX XX XX</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Baku, Azerbaijan</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 CityAssist. Bütün hüquqlar qorunur.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{% static 'js/modern.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>
